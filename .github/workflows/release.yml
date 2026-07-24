@@ -139,8 +139,13 @@ jobs:
 
       - name: Install Android SDK and NDK
         run: |
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager "platforms;android-36" "build-tools;36.0.0" "ndk;28.2.13676358"
+          sdkmanager_path="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -print -quit)"
+          if [[ -z "$sdkmanager_path" ]]; then
+            echo "sdkmanager was not found under $ANDROID_HOME/cmdline-tools." >&2
+            exit 1
+          fi
+          yes | "$sdkmanager_path" --licenses >/dev/null || true
+          "$sdkmanager_path" "platforms;android-36" "build-tools;36.0.0" "ndk;28.2.13676358"
           echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_ENV"
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_ENV"
 
