@@ -143,6 +143,9 @@ function shortId(value: string, start = 8): string {
   if (value.length <= start + 5) return value;
   return `${value.slice(0, start)}...${value.slice(-4)}`;
 }
+function peerFailed(peer: ClientPeer, result: SyncResult | null): boolean {
+  return result?.peerErrors.some((error) => error.startsWith(`Peer ${peer.deviceId} at `)) ?? false;
+}
 
 function formatCount(value: number): string {
   return new Intl.NumberFormat().format(value);
@@ -805,9 +808,9 @@ function App() {
             <div className="compact-peer-list">
               {snapshot.peers.slice(0, 3).map((peer) => (
                 <div className="compact-peer" key={peer.deviceId}>
-                  <span className={`peer-presence${peer.pendingObjects > 0 ? " is-busy" : ""}`} />
+                  <span className={`peer-presence${peer.pendingObjects > 0 ? " is-busy" : peerFailed(peer, syncResult) ? " is-unreachable" : ""}`} />
                   <div><strong>{shortId(peer.deviceId)}</strong><span>{peer.address}</span></div>
-                  <small>{peer.pendingObjects > 0 ? `${peer.pendingObjects} pending` : "Ready"}</small>
+                  <small>{peer.pendingObjects > 0 ? `${peer.pendingObjects} pending` : peerFailed(peer, syncResult) ? "Unreachable" : "Configured"}</small>
                 </div>
               ))}
             </div>
@@ -894,7 +897,7 @@ function App() {
                 <div className="peer-main"><strong>{shortId(peer.deviceId, 12)}</strong><span>{peer.address}</span><code>{shortId(peer.publicKey, 14)}</code></div>
                 <div className="peer-stat"><span>Watermark</span><strong>{formatCount(peer.highWatermark)}</strong></div>
                 <div className="peer-stat"><span>Pending</span><strong>{formatCount(peer.pendingObjects)}</strong></div>
-                <span className={`peer-state${peer.pendingObjects > 0 ? " is-busy" : ""}`}><span />{peer.pendingObjects > 0 ? "Receiving" : "Ready"}</span>
+                <span className={`peer-state${peer.pendingObjects > 0 ? " is-busy" : peerFailed(peer, syncResult) ? " is-unreachable" : ""}`}><span />{peer.pendingObjects > 0 ? "Receiving" : peerFailed(peer, syncResult) ? "Unreachable" : "Configured"}</span>
                 <button className="icon-button danger-button" type="button" title="Revoke peer" aria-label={`Revoke peer ${shortId(peer.deviceId)}`} onClick={() => void revokePeer(peer)} disabled={busy === `revoke-${peer.deviceId}`}>
                   {busy === `revoke-${peer.deviceId}` ? <LoaderCircle className="spin" size={17} /> : <Trash2 size={17} />}
                 </button>

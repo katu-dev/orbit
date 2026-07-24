@@ -1065,6 +1065,9 @@ code {
   background: var(--blue);
   box-shadow: 0 0 0 4px var(--blue-pale);
 }
+.peer-presence.is-unreachable {
+  background: var(--orange);
+}
 
 .compact-peer div,
 .activity-row div {
@@ -1355,6 +1358,9 @@ code {
 
 .peer-state.is-busy {
   color: var(--blue);
+}
+.peer-state.is-unreachable {
+  color: var(--orange);
 }
 
 .empty-state {
