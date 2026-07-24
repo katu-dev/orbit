@@ -1,0 +1,27 @@
+[package]
+name = "orbit-daemon"
+description = "Cross-platform background synchronization daemon for Orbit"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+clap.workspace = true
+getrandom.workspace = true
+hex.workspace = true
+orbit-core.workspace = true
+orbit-crypto.workspace = true
+orbit-engine = { path = "../orbit-engine" }
+orbit-protocol = { path = "../orbit-protocol" }
+orbit-store = { path = "../orbit-store" }
+orbit-transport = { path = "../orbit-transport" }
+quinn.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+toml.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

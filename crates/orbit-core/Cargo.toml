@@ -1,0 +1,14 @@
+[package]
+name = "orbit-core"
+description = "Domain model and reconciliation primitives for Orbit"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
+unicode-casefold.workspace = true
+unicode-normalization.workspace = true
+uuid.workspace = true

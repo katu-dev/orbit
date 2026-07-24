@@ -1,0 +1,19 @@
+[package]
+name = "orbit-protocol"
+description = "Versioned wire messages and capability negotiation for Orbit"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+getrandom.workspace = true
+orbit-core.workspace = true
+orbit-crypto = { path = "../orbit-crypto" }
+prost.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+
+[build-dependencies]
+prost-build.workspace = true
+protoc-bin-vendored.workspace = true

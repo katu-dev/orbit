@@ -1,0 +1,21 @@
+[package]
+name = "orbit-engine"
+description = "Local filesystem ingestion and synchronization orchestration for Orbit"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+getrandom.workspace = true
+orbit-content = { path = "../orbit-content" }
+orbit-core.workspace = true
+orbit-crypto.workspace = true
+orbit-protocol = { path = "../orbit-protocol" }
+orbit-store = { path = "../orbit-store" }
+tempfile.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+walkdir.workspace = true
+
+[dev-dependencies]

@@ -1,0 +1,157 @@
+syntax = "proto3";
+
+package orbit.v1;
+
+message Handshake {
+  uint32 minimum_protocol_version = 1;
+  uint32 maximum_protocol_version = 2;
+  bytes device_id = 3;
+  bytes group_id = 4;
+  repeated Capability capabilities = 5;
+  uint32 maximum_control_frame_bytes = 6;
+  uint64 maximum_object_bytes = 7;
+
+  enum Capability {
+    UNSPECIFIED = 0;
+    ENCRYPTED_OBJECTS = 1;
+    FAST_CDC_V2020 = 2;
+    RESUMABLE_OBJECTS = 3;
+    TOMBSTONES = 4;
+    KEEP_BOTH_CONFLICTS = 5;
+    SIGNED_CHANGES = 6;
+    AUTHENTICATED_SESSIONS = 7;
+  }
+}
+
+message HandshakeAck {
+  uint32 selected_protocol_version = 1;
+  repeated Handshake.Capability capabilities = 2;
+  uint32 maximum_control_frame_bytes = 3;
+  uint64 maximum_object_bytes = 4;
+}
+
+message SessionHello {
+  Handshake handshake = 1;
+  bytes nonce = 2;
+  bytes transport_binding = 3;
+  bytes public_key = 4;
+  bytes enrollment_proof = 5;
+  uint32 listen_port = 6;
+}
+
+message SessionChallenge {
+  Handshake handshake = 1;
+  HandshakeAck acknowledgement = 2;
+  bytes nonce = 3;
+  bytes responder_signature = 4;
+}
+
+message SessionProof {
+  bytes initiator_signature = 1;
+}
+
+message ControlEnvelope {
+  oneof message {
+    ChangeLogRequest change_log_request = 1;
+    ChangeBatch change_batch = 2;
+    ObjectRangeRequest object_range_request = 3;
+    ObjectOffer object_offer = 4;
+    ObjectAcknowledgement object_acknowledgement = 5;
+  }
+}
+
+message ChangeLogRequest {
+  uint64 after_sequence = 1;
+  uint32 maximum_records = 2;
+}
+
+message EncryptedChange {
+  uint64 sequence = 1;
+  bytes revision_id = 2;
+  bytes content_id = 3;
+  bytes encrypted_record = 4;
+  bytes author_device_id = 5;
+  bytes signature = 6;
+}
+
+message ChangeBatch {
+  repeated EncryptedChange records = 1;
+  uint64 high_watermark = 2;
+  bool has_more = 3;
+}
+
+message ManifestEnvelope {
+  uint32 format_version = 1;
+
+  oneof record {
+    FileRecord file = 2;
+    TombstoneRecord tombstone = 3;
+  }
+}
+
+message FileRecord {
+  bytes file_id = 1;
+  bytes revision_id = 2;
+  string relative_path = 3;
+  uint64 size = 4;
+  sint64 modified_at_unix_ms = 5;
+  repeated VersionCounter version = 6;
+  repeated ChunkReference chunks = 7;
+}
+
+message TombstoneRecord {
+  bytes file_id = 1;
+  bytes revision_id = 2;
+  string relative_path = 3;
+  sint64 deleted_at_unix_ms = 4;
+  repeated VersionCounter version = 5;
+}
+
+message VersionCounter {
+  bytes device_id = 1;
+  uint64 counter = 2;
+}
+
+message ChunkReference {
+  bytes content_id = 1;
+  uint32 plaintext_size = 2;
+}
+
+message ObjectRequest {
+  bytes request_id = 1;
+  repeated bytes content_ids = 2;
+}
+
+message ObjectOffer {
+  bytes request_id = 1;
+  bytes content_id = 2;
+  uint64 encrypted_size = 3;
+  uint64 start_offset = 4;
+}
+
+message ObjectRangeRequest {
+  bytes request_id = 1;
+  bytes content_id = 2;
+  uint64 start_offset = 3;
+}
+
+message ObjectStreamHeader {
+  bytes request_id = 1;
+  bytes content_id = 2;
+  uint64 encrypted_size = 3;
+  uint64 start_offset = 4;
+}
+
+message ObjectAcknowledgement {
+  bytes request_id = 1;
+  bytes content_id = 2;
+  Status status = 3;
+
+  enum Status {
+    UNSPECIFIED = 0;
+    VERIFIED = 1;
+    ALREADY_PRESENT = 2;
+    RETRY = 3;
+    REJECTED = 4;
+  }
+}

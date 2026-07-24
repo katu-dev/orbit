@@ -1,0 +1,55 @@
+[workspace]
+resolver = "2"
+members = [
+	"apps/orbit-client/src-tauri",
+	"crates/orbit-content",
+	"crates/orbit-core",
+	"crates/orbit-crypto",
+	"crates/orbit-daemon",
+	"crates/orbit-engine",
+	"crates/orbit-protocol",
+	"crates/orbit-store",
+	"crates/orbit-transport",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.87"
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+blake3 = "1.8"
+chacha20poly1305 = { version = "0.11", features = ["zeroize"] }
+clap = { version = "4.5", features = ["derive"] }
+ed25519-dalek = { version = "2.2", features = ["zeroize"] }
+fastcdc = "4.0.1"
+getrandom = "0.4"
+hex = "0.4"
+hkdf = "0.13"
+orbit-core = { path = "crates/orbit-core" }
+orbit-crypto = { path = "crates/orbit-crypto" }
+prost = "0.13"
+prost-build = "0.13"
+protoc-bin-vendored = "3"
+quinn = { version = "0.11", default-features = false, features = ["runtime-tokio", "rustls-ring"] }
+rcgen = { version = "0.13", default-features = false, features = ["crypto", "ring"] }
+rusqlite = { version = "0.37", features = ["bundled"] }
+rustls = { version = "0.23", default-features = false, features = ["ring", "std"] }
+serde = { version = "1", features = ["derive"] }
+sha2 = "0.11"
+tempfile = "3"
+thiserror = "2"
+time = "=0.3.41"
+tokio = { version = "1", features = ["io-util", "macros", "net", "rt-multi-thread", "signal", "sync", "time"] }
+toml = "0.8"
+unicode-casefold = "0.2"
+unicode-normalization = "0.1"
+uuid = { version = "1", features = ["serde", "v4"] }
+walkdir = "2.5"
+zeroize = "1.9"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "symbols"

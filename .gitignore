@@ -1,0 +1,13 @@
+/target/
+/.tmp/
+
+**/.DS_Store
+**/.idea/
+**/.vscode/
+
+*.key
+*.keystore
+*.jks
+key.properties
+keystore.properties
+local.properties

@@ -1,0 +1,25 @@
+[package]
+name = "orbit-transport"
+description = "Authenticated QUIC peer transport and synchronization for Orbit"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+orbit-core.workspace = true
+orbit-crypto.workspace = true
+orbit-engine = { path = "../orbit-engine" }
+orbit-protocol = { path = "../orbit-protocol" }
+orbit-store = { path = "../orbit-store" }
+prost.workspace = true
+quinn.workspace = true
+rcgen.workspace = true
+rustls.workspace = true
+thiserror.workspace = true
+time.workspace = true
+tokio.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

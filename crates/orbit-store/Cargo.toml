@@ -1,0 +1,17 @@
+[package]
+name = "orbit-store"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+orbit-core.workspace = true
+orbit-crypto.workspace = true
+rusqlite.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

@@ -1,0 +1,13 @@
+[package]
+name = "orbit-content"
+description = "Content-defined chunking and delta planning for Orbit"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+fastcdc.workspace = true
+orbit-core.workspace = true
+orbit-crypto = { path = "../orbit-crypto" }
+thiserror.workspace = true
